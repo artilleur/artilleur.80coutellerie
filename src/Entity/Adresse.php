@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Entity;
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AdresseRepository;
+
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\AdresseRepository;
 
 
 
