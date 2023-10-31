@@ -13,6 +13,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
+        "easycorp/easyadmin-bundle": "^4.8",
         "knplabs/knp-menu-bundle": "*",
         "knplabs/knp-paginator-bundle": "^5.9",
         "nelmio/cors-bundle": "^2.3",
