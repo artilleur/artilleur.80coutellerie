@@ -2,11 +2,18 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
-use App\Repository\ProduitRepository;
+use App\Entity\Utilisateur;
 
+use App\Form\Utilisateur1Type;
+use App\Repository\ProduitRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UtilisateurRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/cart', name: 'cart_')]
 class PanierController extends AbstractController
@@ -111,4 +118,33 @@ class PanierController extends AbstractController
 
         return $this->redirectToRoute('cart_index');
     }
+
+    #[Route('/{id}/edit', name: 'app_utilisateur_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Utilisateur $utilisateur, UtilisateurRepository $utilisateurRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(Utilisateur1Type::class, $utilisateur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $utilisateurRepository->save($utilisateur, true);
+            // encode the plain password
+           $utilisateur->setPassword(
+            $userPasswordHasher->hashPassword(
+                $utilisateur,
+                $form->get('plainPassword')->getData()
+            )
+        );
+
+         $entityManager->flush();
+
+            return $this->redirectToRoute('app_utilisateur_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('utilisateur/edit.html.twig', [
+            'utilisateur' => $utilisateur,
+            'form' => $form,
+        ]);
+    }
+
+
 }

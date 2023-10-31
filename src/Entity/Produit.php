@@ -4,19 +4,24 @@ namespace App\Entity;
 
 
 
+use Vich\Uploadable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class) ]
 
-#[ApiResource]
+#[ORM\HasLifecycleCallbacks]
 
+#[Vich\Uploadable]
+
+#[ApiResource()]
 
 class Produit
 {
@@ -28,7 +33,10 @@ class Produit
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[Vich\UploadableField(mapping: 'produit_image', fileNameProperty: 'image')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 2)]
     private ?string $prix = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -44,9 +52,13 @@ class Produit
     #[ORM\OneToMany(mappedBy: 'pro', targetEntity: CommandeDetail::class)]
     private Collection $commandeDetails;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updateAt = null;
+
     public function __construct()
     {
         $this->commandeDetails = new ArrayCollection();
+        $this->updateAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -65,6 +77,42 @@ class Produit
 
         return $this;
     }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    // public function setImageName(?string $imageName): void
+    // {
+    //     $this->imageName = $imageName;
+    // }
+
+    // public function getImageName(): ?string
+    // {
+    //     return $this->imageName;
+    // }
+
 
     public function getPrix(): ?string
     {
@@ -140,6 +188,20 @@ class Produit
                 $commandeDetail->setPro(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUpdateAt(): ?\DateTimeImmutable
+    {
+        return $this->updateAt;
+    }
+
+    #[ORM\PrePersist]
+     
+    public function setUpdateAt(): static
+    {
+        $this->updateAt =  new \DateTimeImmutable();
 
         return $this;
     }

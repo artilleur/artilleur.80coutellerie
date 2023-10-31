@@ -16,6 +16,11 @@
     {# <button class="btn">{{ button_label|default('Save') }}</button> #}
     <button type="submit" class="btn btn-primary">Valider la commande </button>
 {{ form_end(form) }}
+
+
+
+
+
 <table class="table";
                     <thead>
                         <tr>
@@ -27,6 +32,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                    
+
+
+
+
                         {% for element in data %}
                             <tr>
                                 <td>{{ element.product.nom }}</td>
@@ -51,6 +61,10 @@
                             
                             <td>{{ soustotal  }} €</td>
                                 <a href="{{ path('app_adresse_index' ) }}" class="btn btn-danger">modifier</a>
+                                
+                                 
+                    
+
                             
                             
                         </tr>
@@ -86,7 +100,11 @@
                         </tr>
                     </tfoot>
                 </table>
+
+                
                 
                  {# <a href="{{ path('app_commande_add') }}" class="btn btn-primary">Valider la commande</a>  #}
                 </div>
 {% endblock %}
+
+

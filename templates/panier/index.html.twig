@@ -13,6 +13,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                        
                             <th>Produit</th>
                             <th>Prix</th>
                             <th>Quantité</th>
@@ -23,6 +24,7 @@
                     <tbody>
                         {% for element in data %}
                             <tr>
+                                 
                                 <td>{{ element.product.nom }}</td>
                                 <td>{{ element.product.prix }} €</td>
                                 <td>{{ element.quantity }}</td>
@@ -31,6 +33,8 @@
                                     <a href="{{ path('cart_add', {id: element.product.id}) }}" class="btn btn-success">+</a>
                                     <a href="{{ path('cart_remove', {id: element.product.id}) }}" class="btn btn-warning">-</a>
                                     <a href="{{ path('cart_delete', {id: element.product.id}) }}" class="btn btn-danger">Supprimer</a>
+                                     
+                                    
                                 </td>
                             </tr>
                         {% else %}
