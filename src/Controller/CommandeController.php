@@ -39,41 +39,77 @@ class CommandeController extends AbstractController
         // $form=$this->createForm(CommandeType::class,data: null);
         // dd($this->getUser()->getNom());
         $userData=$this->getUser();
+        // dd($userData->getRoles());
 //$session->set('panier', []);
         // On initialise des variables
         $data = [];
         $total= 0;
         $soustotal = 0;
         $fdp = 6;
-        $totaltva= 0;
-        
+        $totaltva = 0;
+       
+
+if ($this->isGranted('ROLE_ADMIN')) {
+
+    $tva = 0; // TVA rate (20%)
+} elseif ($this->isGranted('ROLE_COMMERCIAL')) {
+    
+    $tva = 0; 
+
+} elseif ($this->isGranted('ROLE_COMMERCE')) {
+    
+    $tva = 0; 
+
+}
+
+elseif ($this->isGranted('ROLE_USER')) {
+    
+    $tva = 20; 
+
+} else  {
+    
+    $tva = 0;
+}
 
         foreach($panier as $id => $quantity){
             $product = $productsRepository->find($id);
+            
 
             $data[] = [
                 'product' => $product,
-                'quantity' => $quantity
+                'quantity' => $quantity,
+                
             ];
             //dd($data);
             $soustotal += $product->getPrix() * $quantity;
             
             }
-            if($soustotal>100) {
-                $total =$soustotal+0; 
+
+            $totaltva += $soustotal+($soustotal*$tva/100);
+
+
+
+           
+
+            if($totaltva>100) {
+                $total =$totaltva+0; 
             }
             else {
-            $total =$soustotal+$fdp ;
+            $total =$totaltva+$fdp ;
             
         }
+
+        
         // return $this->render('commande/index.html.twig', compact('data', 'soustotal', 'total','userData', 'fdp','form'));
         return $this->render('commande/index.html.twig', [
             'form' => $form->createView(),  // Convert Form to FormView
            'data' => $data,
             'soustotal' => $soustotal,
+            'totaltva' => $totaltva,
             'total' => $total,
             'userData' => $userData,
             'fdp' => $fdp,
+            'tva'=> $tva,
             
         ]);
         

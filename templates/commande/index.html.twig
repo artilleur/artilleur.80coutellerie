@@ -56,18 +56,29 @@
                         {% endfor %}
                     </tbody>
                     <tfoot>
+
+                       
+
                         <tr>
                             <td colspan="3">sous Total</td>
                             
                             <td>{{ soustotal  }} €</td>
                                 <a href="{{ path('app_adresse_index' ) }}" class="btn btn-danger">modifier</a>
                                 
-                                 
-                    
+                          </tr>
+                         <tr>
+                            <td colspan="3">tva</td>
+                            
+                            <td>{{ tva  }} %</td>
+                                
+                          </tr>
 
+                          <tr>
+                            <td colspan="3">totaltva</td>
                             
-                            
-                        </tr>
+                            <td>{{ totaltva  }} €</td>
+                                
+                           </tr>
                         <tr>
                             <td colspan="3">frais de port</td>
                             {% if soustotal<100 %}
@@ -79,12 +90,7 @@
                             <td> 0 €</td>
                             
                             {% endif %}
-                            
-                
-                            
-                                
-                            
-                        </tr>
+                              </tr>
 
 
 

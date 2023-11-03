@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -54,7 +55,17 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
             ->add('ville')
             ->add('pays')
             ->add('telephone')
-           // ->add('monCul')
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Commerce' => 'ROLE_COMMERCE',
+                    'Utilisateur' => 'ROLE_USER',
+                    'Commercial' => 'ROLE_COMMERCIAL',
+                    'Administrateur' => 'ROLE_ADMIN'
+                ],
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'Rôles' 
+            ])
          ;
      }
 
