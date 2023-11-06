@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Controller\Admin\AdresseCrudController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\Admin\CategorieCrudController;
+use App\Entity\SousCategorie;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -55,6 +56,7 @@ class DashboardController extends AbstractDashboardController
          yield MenuItem::linkToCrud('Produit', 'fa-brands fa-product-hunt', Produit::class);
          yield MenuItem::linkToCrud('Adresse', 'fa-brands fa-product-hunt', Adresse::class);
          yield MenuItem::linkToCrud('Utilisateur', 'fa-brands fa-product-hunt', Utilisateur::class);
+         yield MenuItem::linkToCrud('sous_Categorie', 'fa-solid fa-shop', SousCategorie::class);
         
     }
 }

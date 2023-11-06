@@ -55,6 +55,11 @@ class SousCategorie
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
@@ -78,6 +83,7 @@ class SousCategorie
 
         return $this;
     }
+    
 
     /**
      * @return Collection<int, Produit>

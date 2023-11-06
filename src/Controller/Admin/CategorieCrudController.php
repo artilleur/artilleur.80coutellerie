@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
+
 class CategorieCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -23,6 +24,8 @@ class CategorieCrudController extends AbstractCrudController
 
         
             TextField::new('nom'),
+            TextField::new('imagefile')->setFormType(VichImageType::class)->onlyWhenCreating(),
+            imageField::new('image')->setBasePath('/uploads/images')->onlyOnIndex(),
 
            
         ];
