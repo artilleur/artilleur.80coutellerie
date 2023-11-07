@@ -31,13 +31,14 @@ class PaymentController extends AbstractController
         $productStripe = [];
         //recupére la commande en cours
       $order = $this->em->getRepository(Commande::class)->findOneBy(['id' => $id]);
-    // dd($order);
+     //dd($order);
      //si commande introuvable ou n'existe pas
      if(!$order){
         return $this->redirectToRoute('panier_index');
      }
+     $totaltva=0;
 
-     foreach ($order->getPaniers()->getValues() as $product) {
+     foreach ($order->getCommandeDetails()->getValues() as $product) {
         //pour recup le nom du produit
         $productData = $this->em->getRepository(Produit::class)->findOneBy(['id' => $product->getPro()]);
         //dd($productData);
@@ -45,14 +46,45 @@ class PaymentController extends AbstractController
         $producStripe[] = [
             'price_data' => [
                 'currency' => 'eur',
-                'unit_amount' => $product->getPanPrixUnite() * 100,
+                'unit_amount' => $product->getPrix() * 100,
                 'product_data' => [
-                    'name' => $productData->getProNom()
+                    'name' => $productData->getNom()
                 ]
                 ],
-                'quantity' => $product->getPanQuantite()
+                'quantity' => $product->getQuantite()
             ];
+
+        
+        $totaltva += $totaltva+ $product->getPrix() * $product->getQuantite();
+
      }
+  // dd($totaltva);
+     if($totaltva>100) {
+        //$total =$totaltva+0; 
+        $producStripe[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => 0,
+                    'product_data' => [
+                        'name' => 'fdp'
+                    ]
+                    ],
+                    'quantity' => 1,
+                ];
+    }
+    else {
+        $producStripe[] = [
+            'price_data' => [
+                'currency' => 'eur',
+                'unit_amount' => 6*100,
+                'product_data' => [
+                    'name' => 'fdp'
+                ]
+                ],
+                'quantity' => 1,
+            ];
+    
+}
 
     //  $transporteurData = $this->em->getRepository(Transporteur::class)->findOneBy(['id' => $order->getComTransporteur()]);
       
@@ -103,7 +135,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
     #[Route('/order/success/{id}', name: 'payment_success')]
     public function StripeSuccess(EntityManagerInterface $em,$id): Response{
         $order = $this->em->getRepository(Commande::class)->findOneBy(['id' => $id]);
-        $order->setComIsPaid(true);
+        //$order->setComIsPaid(true);
         $em->persist($order);
         $em->flush();
         //return $this->render('order/succes.html.twig');

@@ -124,6 +124,63 @@ elseif ($this->isGranted('ROLE_USER')) {
        $this->denyAccessUnlessGranted('ROLE_USER');
 
        $panier=$session->get('panier', []);
+       $data = [];
+       $total= 0;
+       $soustotal = 0;
+       $fdp = 6;
+       $totaltva = 0;
+      
+
+if ($this->isGranted('ROLE_ADMIN')) {
+
+   $tva = 0; // TVA rate (20%)
+} elseif ($this->isGranted('ROLE_COMMERCIAL')) {
+   
+   $tva = 0; 
+
+} elseif ($this->isGranted('ROLE_COMMERCE')) {
+   
+   $tva = 0; 
+
+}
+
+elseif ($this->isGranted('ROLE_USER')) {
+   
+   $tva = 20; 
+
+} else  {
+   
+   $tva = 0;
+}
+
+       foreach($panier as $id => $quantity){
+           $product = $produitRepository->find($id);
+           
+
+           $data[] = [
+               'product' => $product,
+               'quantity' => $quantity,
+               
+           ];
+           //dd($data);
+           $soustotal += $product->getPrix() * $quantity;
+           
+           }
+
+           $totaltva += $soustotal+($soustotal*$tva/100);
+
+
+
+          
+
+           if($totaltva>100) {
+               $total =$totaltva+0; 
+           }
+           else {
+           $total =$totaltva+$fdp ;
+           
+       }
+
        if($panier=== []){
         $this->addFlash('message', 'votre panier est vide');
        return  $this->redirectToRoute('app_home');
@@ -137,7 +194,7 @@ elseif ($this->isGranted('ROLE_USER')) {
     //dd( $form->get('transporteur')->getData());
     if ($form->isSubmitted() && $form->isValid()) {
         $adresseLivraison = $form->get('adresse')->getData();
-        
+        $total= $total;
         $commentaire = $form->get('commentaire')->getData();
         $adresseFacture = $form->get('adresse_fact')->getData();
         // $transporteur = $form->get('transporteur')->getData();
@@ -179,14 +236,17 @@ elseif ($this->isGranted('ROLE_USER')) {
        //on persiste et on flush
        $em->persist($commande);
        $em->flush();
+       $id= $commande->getId();
     }
 
            $session->remove('panier');
             
-            return $this->redirectToRoute('app_home');
+            
         // return $this->render('commande/index.html.twig', [
         //     'controller_name' => 'CommandeController',
       //  ]);
+      return $this->render('commande/recap.html.twig',compact('total','fdp','soustotal','id','data','tva','totaltva'));
+
     }
 
     #[Route('/{id}/edit', name: 'app_adresse_edit', methods: ['GET', 'POST'])]
