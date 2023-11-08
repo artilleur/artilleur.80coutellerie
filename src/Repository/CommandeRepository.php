@@ -39,6 +39,33 @@ class CommandeRepository extends ServiceEntityRepository
         }
     }
 
+    public function myCommande($id): array
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('c')
+            //->select('c.id as c_id, u.id as user_id, u. pro.id as p_id, produit.nom as p_nom, detail.prix as p_prix, detail.quantite as p_quantite')
+            ->select('c.id as com_id, u.id as user_id,  produit.nom as p_nom, detail.prix as prix, detail.quantite as quantite, c.date_commande as date')
+            ->join('c.utilisateur', 'u')
+            ->join('c.commandeDetails', 'detail')
+            ->join('detail.pro', 'produit')
+            ->where('u.id = :comUtiId')
+            ->setParameter('comUtiId', $id);
+           // ->orderBy('p.price', 'ASC');
+    
+        // if (!$includeUnavailableProducts) {
+        //     $qb->andWhere('p.available = TRUE');
+        // }
+    
+        $query = $qb->getQuery();
+    
+        return $query->execute();
+        // return $query->getResult();
+    
+        // to get just one result:
+        // $product = $query->setMaxResults(1)->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Commande[] Returns an array of Commande objects
 //     */

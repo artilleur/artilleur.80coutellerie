@@ -53,10 +53,12 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
          yield MenuItem::linkToCrud('Categorie', 'fa-solid fa-shop', Categorie::class);
-         yield MenuItem::linkToCrud('Produit', 'fa-brands fa-product-hunt', Produit::class);
-         yield MenuItem::linkToCrud('Adresse', 'fa-brands fa-product-hunt', Adresse::class);
-         yield MenuItem::linkToCrud('Utilisateur', 'fa-brands fa-product-hunt', Utilisateur::class);
          yield MenuItem::linkToCrud('sous_Categorie', 'fa-solid fa-shop', SousCategorie::class);
+         yield MenuItem::linkToCrud('Produit', 'fa-brands fa-product-hunt', Produit::class);
+         yield MenuItem::linkToCrud('Utilisateur', 'fa-brands fa-product-hunt', Utilisateur::class);
+         yield MenuItem::linkToCrud('Adresse', 'fa-brands fa-product-hunt', Adresse::class);
+        //yield MenuItem::linkToCrud('Utilisateur', 'fa-brands fa-product-hunt', Utilisateur::class);
+         //yield MenuItem::linkToCrud('sous_Categorie', 'fa-solid fa-shop', SousCategorie::class);
         
     }
 }

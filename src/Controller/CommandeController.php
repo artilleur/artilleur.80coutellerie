@@ -26,6 +26,7 @@ class CommandeController extends AbstractController
     public function index(SessionInterface $session, ProduitRepository $productsRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+        
         $panier = $session->get('panier', []);
         if($panier=== []){
             $this->addFlash('message', 'votre panier est vide');

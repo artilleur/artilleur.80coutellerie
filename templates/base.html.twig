@@ -92,6 +92,14 @@ $(this).toggleClass("fa-heart fa-heart-o");
 												</form>
 											</li>
 
+											<li>
+                                            <form >
+													{# <a class='nav-link' href="{{ path('app_register') }}">Creation compte client</a> #}
+													<a class='nav-link' href="{{ path('app_commande_mon_index', {'id': app.user.id}) }}">mes commande</a>
+
+												</form>
+											</li>
+
 											
 
 
@@ -104,10 +112,11 @@ $(this).toggleClass("fa-heart fa-heart-o");
 
 								<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
+
+								
+
 								<li>
-
-
-												<form >
+                                            <form >
 													<a class='nav-link' href="{{ path('app_register') }}">Creation compte client</a>
 													<a class='nav-link' href="{{ path('app_login') }}">login client</a>
 

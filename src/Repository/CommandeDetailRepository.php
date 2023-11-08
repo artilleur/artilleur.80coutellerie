@@ -20,6 +20,7 @@ class CommandeDetailRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CommandeDetail::class);
     }
+    
 
 //    /**
 //     * @return CommandeDetail[] Returns an array of CommandeDetail objects

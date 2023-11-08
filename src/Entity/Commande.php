@@ -48,7 +48,7 @@ class Commande
     public function __construct()
     {
         $this->commandeDetails = new ArrayCollection();
-        $this->date_commande= new  \DateTimeImmutable();
+        $this->date_commande= new  \DateTimeImmutable( );
     }
 
     
@@ -71,6 +71,10 @@ class Commande
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->date_commande;
+    }
     
 
     public function getUtilisateur(): ?utilisateur

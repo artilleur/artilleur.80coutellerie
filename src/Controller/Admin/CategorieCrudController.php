@@ -24,8 +24,7 @@ class CategorieCrudController extends AbstractCrudController
 
         
             TextField::new('nom'),
-            TextField::new('imagefile')->setFormType(VichImageType::class)->onlyWhenCreating(),
-            imageField::new('image')->setBasePath('/uploads/images')->onlyOnIndex(),
+            ImageField::new('image')->setUploadDir('public/images'),
 
            
         ];
